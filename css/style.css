@@ -188,6 +188,7 @@ section h3::after {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(76, 175, 88, 0.4);
   color: #fff;
   padding: 10px 20px;
+  user-select: none;
 }
 .hadith   .buttons .number {
   padding: 10px 20px;
@@ -271,6 +272,7 @@ section h3::after {
   transition: .5s all ease-in-out;
   color: #232323;
   font-size: 17px;
+  user-select: none;
 }
 .surahsContainer .surah:hover {
   transform: scale(1.1);
@@ -324,6 +326,7 @@ section h3::after {
   color: #121212;
 }
 .surah-popup p {
+  user-select: none;
   line-height: 2;
   position: relative;
   padding: 5px;
