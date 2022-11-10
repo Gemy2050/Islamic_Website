@@ -11,6 +11,7 @@ window.addEventListener("scroll", (e) => {
     ? fixedNav.classList.add("active")
     : fixedNav.classList.remove("active");
 });
+
 // Hadith Changer
 let hadithContainer = document.querySelector(".hadithContainer .hadith"),
   next = document.querySelector(".buttons .next"),
@@ -98,7 +99,6 @@ function getSurahs() {
   })
   
 }
-getSurahs();
 
 // Pray Time
 let cards = document.querySelector(".pray .cards");
@@ -124,7 +124,12 @@ function getPrayTime() {
   })
 
 }
-getPrayTime();
+
+
+window.onload = function () {
+  getSurahs();
+  getPrayTime();
+};
 
 // Scroll to Top Button
 function scrollTop() {
