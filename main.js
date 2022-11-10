@@ -60,44 +60,42 @@ let surahsContainer = document.querySelector(".surahsContainer");
 function getSurahs() {
 
   // Fetch Surahs
-  fetch("/surahs_name.json")
-    .then((res) => res.json())
-    .then((data) => {
-      let surahs = data.data;
-      for (let i = 0; i < 114; i++) {
-        surahsContainer.innerHTML += `
+  fetch("http://api.alquran.cloud/v1/meta")
+  .then((res) => res.json())
+  .then((data) => {
+    let surahs = data.data.surahs.references;
+    for(let i=0; i < 114; i++) {
+      surahsContainer.innerHTML += `
         <div class="surah">
           <p>${surahs[i].name}</p>
           <p>${surahs[i].englishName}</p>
         </div>
       `;
-      }
-      let surahsTitle = document.querySelectorAll(".surah");
-      let popup = document.querySelector(".surah-popup");
-      let ayatContainer = document.querySelector(".surah-popup .ayat");
-      let closeIcon = document.querySelector(".surah-popup .close ");
+    }
+    let surahsTitle = document.querySelectorAll(".surah");
+    let popup = document.querySelector(".surah-popup");
+    let ayatContainer = document.querySelector(".surah-popup .ayat");
+    let closeIcon = document.querySelector(".surah-popup .close ");
 
-      surahsTitle.forEach((title, index) => {
-        title.addEventListener("click", (e) => {
-          fetch(`http://api.alquran.cloud/v1/surah/${index + 1}`)
-            .then((res) => res.json())
-            .then((data) => {
-              let ayatText = data.data.ayahs;
-              ayatContainer.innerHTML = "";
-              ayatText.forEach((aya) => {
-                ayatContainer.innerHTML += `
+    surahsTitle.forEach((title, index) => {
+      title.addEventListener("click", (e)=> {
+        fetch(`http://api.alquran.cloud/v1/surah/${index+1}`)
+        .then((res)=> res.json())
+        .then((data)=> {
+          let ayatText = data.data.ayahs;
+          ayatContainer.innerHTML = '';
+          ayatText.forEach((aya) => {
+            ayatContainer.innerHTML += `
             <p>${aya.text} (${aya.numberInSurah})</p>
             `;
-              });
-              popup.appendChild(ayatContainer);
-              popup.classList.add("active");
-              closeIcon.addEventListener("click", () =>
-                popup.classList.remove("active")
-              );
-            });
-        });
+          })
+          popup.appendChild(ayatContainer);
+          popup.classList.add("active");
+          closeIcon.addEventListener("click", () =>popup.classList.remove("active"));
+        })
       });
-    });
+    })
+  })
   
 }
 getSurahs();
@@ -107,7 +105,7 @@ let cards = document.querySelector(".pray .cards");
 
 function getPrayTime() {
 
-  fetch("/pray_time.json")
+  fetch("http://api.aladhan.com/v1/timingsByCity?city=cairo&country=egypt&method=8")
   .then((res) => res.json())
   .then((data) => {
 
