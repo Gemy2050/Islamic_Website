@@ -6,7 +6,7 @@ exploreBtn.onclick = () => {
 };
 // Handle Navbar
 let fixedNav = document.querySelector(".header");
-window.addEventListener("scroll", (e) => {
+window.addEventListener("scroll", () => {
   window.scrollY > 100
     ? fixedNav.classList.add("active")
     : fixedNav.classList.remove("active");
@@ -48,70 +48,70 @@ links.forEach((link) => {
   link.addEventListener("click", (e) => {
     document.querySelector(".header ul li.active").classList.remove("active");
     e.target.classList.add("active");
-    sections.forEach((section)=> {
-      if(section.classList.contains(e.target.dataset.filter)) {
-        section.scrollIntoView({behavior: "smooth",})
+    sections.forEach((section) => {
+      if (section.classList.contains(e.target.dataset.filter)) {
+        section.scrollIntoView({ behavior: "smooth" });
       }
-    })
+    });
   });
 });
 
 // Surah Api
 let surahsContainer = document.querySelector(".surahsContainer");
 function getSurahs() {
-
   // Fetch Surahs
   fetch("http://api.alquran.cloud/v1/meta")
-  .then((res) => res.json())
-  .then((data) => {
-    let surahs = data.data.surahs.references;
-    for(let i=0; i < 114; i++) {
-      surahsContainer.innerHTML += `
+    .then((res) => res.json())
+    .then((data) => {
+      let surahs = data.data.surahs.references;
+      for (let i = 0; i < 114; i++) {
+        surahsContainer.innerHTML += `
         <div class="surah">
           <p>${surahs[i].name}</p>
           <p>${surahs[i].englishName}</p>
         </div>
       `;
-    }
-    let surahsTitle = document.querySelectorAll(".surah");
-    let popup = document.querySelector(".surah-popup");
-    let ayatContainer = document.querySelector(".surah-popup .ayat");
-    let closeIcon = document.querySelector(".surah-popup .close ");
+      }
+      let surahsTitle = document.querySelectorAll(".surah");
+      let popup = document.querySelector(".surah-popup");
+      let ayatContainer = document.querySelector(".surah-popup .ayat");
+      let closeIcon = document.querySelector(".surah-popup .close ");
 
-    surahsTitle.forEach((title, index) => {
-      title.addEventListener("click", (e)=> {
-        fetch(`http://api.alquran.cloud/v1/surah/${index+1}`)
-        .then((res)=> res.json())
-        .then((data)=> {
-          let ayatText = data.data.ayahs;
-          ayatContainer.innerHTML = '';
-          ayatText.forEach((aya) => {
-            ayatContainer.innerHTML += `
+      surahsTitle.forEach((title, index) => {
+        title.addEventListener("click", (e) => {
+          fetch(`http://api.alquran.cloud/v1/surah/${index + 1}`)
+            .then((res) => res.json())
+            .then((data) => {
+              let ayatText = data.data.ayahs;
+              ayatContainer.innerHTML = "";
+              ayatText.forEach((aya) => {
+                ayatContainer.innerHTML += `
             <p>${aya.text} (${aya.numberInSurah})</p>
             `;
-          })
-          popup.appendChild(ayatContainer);
-          popup.classList.add("active");
-          closeIcon.addEventListener("click", () =>popup.classList.remove("active"));
-        })
+              });
+              popup.appendChild(ayatContainer);
+              popup.classList.add("active");
+              closeIcon.addEventListener("click", () =>
+                popup.classList.remove("active")
+              );
+            });
+        });
       });
-    })
-  })
-  
+    });
 }
 
 // Pray Time
 let cards = document.querySelector(".pray .cards");
 
 function getPrayTime() {
-
-  fetch("http://api.aladhan.com/v1/timingsByCity?city=cairo&country=egypt&method=8")
-  .then((res) => res.json())
-  .then((data) => {
-
-    let prays = data.data.timings;
-    for(let pray in prays) {
-      cards.innerHTML += `
+  fetch(
+    "http://api.aladhan.com/v1/timingsByCity?city=cairo&country=egypt&method=8"
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      let prays = data.data.timings;
+      for (let pray in prays) {
+        cards.innerHTML += `
         <div class="card">
             <div class="circle">
               ${prays[pray]}
@@ -119,36 +119,25 @@ function getPrayTime() {
             <p>${pray}</p>
           </div>
       `;
-    }
-    
-  })
-
+      }
+    });
 }
-
-
-window.onload = function () {
-  getSurahs();
-  getPrayTime();
-};
 
 // Scroll to Top Button
 function scrollTop() {
-
   let btn = document.querySelector(".scroll-btn");
-  btn.onclick = ()=> {
+  btn.onclick = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-  }
-  
-  window.onscroll = ()=> {
-    if(window.scrollY >= hadithSection.offsetTop) {
-      btn.style.right = '15px';
-    } else 
-      btn.style.right = "-100%";
-  }
+  };
 
+  window.onscroll = () => {
+    if (window.scrollY >= hadithSection.offsetTop) {
+      btn.style.right = "15px";
+    } else btn.style.right = "-100%";
+  };
 }
 scrollTop();
 
@@ -156,9 +145,18 @@ scrollTop();
 let bars = document.querySelector(".header .bars");
 let ul = document.querySelector(".header ul");
 console.log(bars);
-bars.onclick = function() {
-
+bars.onclick = function () {
   ul.classList.toggle("active");
   this.classList.toggle("active");
+};
 
-}
+
+
+let started = false;
+window.addEventListener("scroll", () => {
+  if (!started) {
+    getSurahs();
+    getPrayTime();
+    started = true;
+  }
+});
